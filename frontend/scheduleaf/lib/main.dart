@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import "test_response.dart";
+import "tasks.dart";
 
 void main() {
   runApp(MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginPage(title: 'ScheduLeaf'),
+      home: LoginPage(title: 'Login'),
     );
   }
 }
@@ -101,6 +102,10 @@ class _LoginPageState extends State<LoginPage> {
                   responseObject = createResponse("test2", "will2");
                   print("response received");
                   print(usernameController.text);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Tasks()),
+                  );
                   // dispose();
                 });
               },
