@@ -10,6 +10,11 @@ ortools = "*"
 jupyterlab = "*"
 fastapi = "*"
 uvicorn = "*"
+nltk = "*"
+python-language-server = "*"
+motor = "*"
+python-dotenv = "*"
+dnspython = "*"
 
 [requires]
 python_version = "3.7"
