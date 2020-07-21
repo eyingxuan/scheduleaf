@@ -11,27 +11,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ScheduLeaf',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LoginPage(title: 'ScheduLeaf'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  LoginPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _LoginPageState extends State<LoginPage> {
   Future<TestResponse> responseObject;
+  final usernameController = TextEditingController();
 
   Future<TestResponse> createResponse(String msg, String name) async {
     final http.Response response = await http.put(
@@ -64,6 +65,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    usernameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -73,18 +81,31 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Enter your username'),
+            Text(
+              'TODO: Logo here',
+              style: TextStyle(fontSize: 30.0),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 40.0),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+              child: TextField(
+                controller: usernameController,
+                decoration: InputDecoration(labelText: 'Enter your username'),
+              ),
             ),
             FlatButton(
               onPressed: () {
                 setState(() {
                   responseObject = createResponse("test2", "will2");
                   print("response received");
+                  print(usernameController.text);
+                  // dispose();
                 });
               },
               child: Text(
-                "Submit",
+                "Login",
               ),
             ),
           ],
