@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'task_input.dart';
+import 'task_input2.dart';
 
 class Tasks extends StatefulWidget {
   @override
@@ -17,7 +18,29 @@ class _TasksState extends State<Tasks> {
           content: TaskInput(),
           actions: <Widget>[
             FlatButton(
-              child: Text('Add'),
+              child: Text('Continue'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showMyDialog2();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showMyDialog2() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add a task'),
+          content: TaskInput2(),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Finish'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
