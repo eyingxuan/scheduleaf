@@ -8,8 +8,6 @@ class Sentiment(Enum):
 
 
 # CONSTANTS
-
-
 WORKING_HOURS = 8
 SUBDIVISIONS = 4
 DAYS = 5

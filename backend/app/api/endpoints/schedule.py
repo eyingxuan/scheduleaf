@@ -1,6 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
-from ...models.user import User
+from fastapi.concurrency import run_in_threadpool
+from ...models.user import ScheduledUser, User
 from ...db.db import AsyncIOMotorClient, get_database
+from ...solver.sentiment import SentimentIntensityAnalyzer, get_analyzer
+from ...solver.util import plan_schedule
 from ...core.config import DATABASE_NAME, COLLECTION_NAME
 
 router = APIRouter()
@@ -32,3 +35,19 @@ async def update_tasks(body: User, db: AsyncIOMotorClient = Depends(get_database
         {"username": body.username}, body.dict(), upsert=True
     )
     return result.upserted_id or result.modified_count == 1
+
+
+@router.get("/tasks/generate/{username}", response_model=ScheduledUser)
+async def generate_plan(
+    username: str,
+    db: AsyncIOMotorClient = Depends(get_database),
+    sentiment: SentimentIntensityAnalyzer = Depends(get_analyzer),
+):
+    row = await db[DATABASE_NAME][COLLECTION_NAME].find_one({"username": username})
+    if not row:
+        raise HTTPException(status_code=404, detail="user not found")
+    user = User(**row)
+    ans = await run_in_threadpool(plan_schedule, user, sentiment)
+    if not ans:
+        raise HTTPException(status_code=406, detail="task list has conflicts")
+    return ans

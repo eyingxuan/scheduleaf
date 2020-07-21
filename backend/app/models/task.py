@@ -6,6 +6,7 @@ class DBTask(BaseModel):
     task_id: int
     title: str
     duration: int
+    deadline: int
     start_time: Optional[int]
     concurrent: bool
     precedes: List[int]
