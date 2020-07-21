@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'task_input.dart';
 
 class Tasks extends StatefulWidget {
   @override
@@ -13,13 +14,7 @@ class _TasksState extends State<Tasks> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Add a task'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('TODO.'),
-              ],
-            ),
-          ),
+          content: TaskInput(),
           actions: <Widget>[
             FlatButton(
               child: Text('Add'),
