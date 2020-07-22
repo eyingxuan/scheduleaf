@@ -9,7 +9,7 @@ class Tasks extends StatefulWidget {
 }
 
 class _TasksState extends State<Tasks> {
-  TaskData taskData = TaskData();
+  List<TaskData> taskDataList = [];
 
   Future<void> _showMyDialog() async {
     return showDialog<void>(
@@ -18,7 +18,7 @@ class _TasksState extends State<Tasks> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Add a task'),
-          content: TaskInput(taskData: taskData),
+          content: TaskInput(taskData: taskDataList[taskDataList.length - 1]),
         );
       },
     );
@@ -32,7 +32,6 @@ class _TasksState extends State<Tasks> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             RaisedButton(
               onPressed: () {
@@ -41,19 +40,36 @@ class _TasksState extends State<Tasks> {
               },
               child: Text('Logout'),
             ),
+            Container(
+              child: new ListView.builder(
+                shrinkWrap: true,
+                itemCount: taskDataList.length,
+                itemBuilder: (BuildContext ctxt, int index) {
+                  return new Card(
+                    child: ListTile(
+                      title: Text(taskDataList[index].name),
+                      leading: Icon(Icons.check_circle_outline),
+                      trailing: Icon(Icons.more_vert),
+                    ),
+                  );
+                },
+              ),
+            ),
             Card(
               child: ListTile(
                 title: Text('Add a task'),
                 leading: Icon(Icons.add_circle_outline),
                 onTap: () {
                   /* react to the tile being tapped */
+                  TaskData taskData = TaskData();
+                  taskDataList.add(taskData);
                   _showMyDialog();
                 },
               ),
             ),
             RaisedButton(
               onPressed: () {
-                print(taskData);
+                print(taskDataList);
               },
               child: Text('Submit'),
             ),
