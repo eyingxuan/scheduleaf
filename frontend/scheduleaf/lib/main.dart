@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import "test_response.dart";
 import "tasks.dart";
 
 void main() {
@@ -32,30 +29,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Future<TestResponse> responseObject;
   final usernameController = TextEditingController();
-
-  Future<TestResponse> createResponse(String msg, String name) async {
-    final http.Response response = await http.put(
-      'http://10.0.2.2:8000/sched/1',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'msg': msg,
-        'name': name,
-      }),
-    );
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return TestResponse.fromJson(json.decode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to update response');
-    }
-  }
 
   void submitForm() {
     // TODO
@@ -99,8 +73,6 @@ class _LoginPageState extends State<LoginPage> {
             FlatButton(
               onPressed: () {
                 setState(() {
-                  responseObject = createResponse("test2", "will2");
-                  print("response received");
                   print(usernameController.text);
                   Navigator.push(
                     context,

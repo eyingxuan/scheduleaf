@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:scheduleaf/task_data.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'task_input.dart';
 import 'task_data.dart';
+import "test_response.dart";
 
 class Tasks extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class Tasks extends StatefulWidget {
 
 class _TasksState extends State<Tasks> {
   List<TaskData> taskDataList = [];
+  Future<bool> responseObject;
 
   Future<void> _showMyDialog() async {
     return showDialog<void>(
@@ -24,8 +28,27 @@ class _TasksState extends State<Tasks> {
     );
   }
 
-  toJson() {
-    List<Object> taskJsonList = [];
+  Future<bool> createResponse() async {
+    final http.Response response = await http.put(
+      'http://10.0.2.2:8000/tasks',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(toJson()),
+    );
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return true;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to update task list');
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    List<dynamic> taskJsonList = [];
     for (int i = 0; i < taskDataList.length; i++) {
       taskJsonList.add(taskDataList[i].taskJson(i));
     }
@@ -83,6 +106,9 @@ class _TasksState extends State<Tasks> {
               onPressed: () {
                 print(taskDataList);
                 print(toJson());
+                responseObject = createResponse();
+                print("response received");
+                print(responseObject);
               },
               child: Text('Submit'),
             ),

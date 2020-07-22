@@ -90,11 +90,15 @@ class TaskData {
     return interval;
   }
 
-  taskJson(id) {
+  int convertMinutesToSlots(int mins) {
+    return durationMinutes ~/ 15;
+  }
+
+  Map<String, dynamic> taskJson(id) {
     return {
       "task_id": id,
       "title": name,
-      "duration": durationMinutes,
+      "duration": convertMinutesToSlots(durationMinutes),
       "deadline": timeInterval(end),
       "start_time": timeInterval(start),
       "concurrent": isConcurrent,
