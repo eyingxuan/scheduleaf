@@ -8,7 +8,7 @@ verify_ssl = true
 [packages]
 ortools = "*"
 jupyterlab = "*"
-fastapi = "*"
+fastapi = "0.60.1"
 uvicorn = "*"
 nltk = "*"
 python-language-server = "*"

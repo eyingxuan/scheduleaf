@@ -3,28 +3,8 @@ from .db.db import connect_to_mongo, close_mongo, AsyncIOMotorClient, get_databa
 from .api.api import router as api_router
 from .solver.sentiment import create_analyzer
 
-from fastapi import FastAPI, Depends, applications
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-
-from fastapi.openapi.docs import get_swagger_ui_html
-
-
-def swagger_monkey_patch(*args, **kwargs):
-    """
-    Wrap the function which is generating the HTML for the /docs endpoint and
-    overwrite the default values for the swagger js and css.
-    """
-    return get_swagger_ui_html(
-        *args,
-        **kwargs,
-        swagger_js_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.29/swagger-ui-bundle.js",
-        swagger_css_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.29/swagger-ui.css"
-    )
-
-
-# Actual monkey patch
-applications.get_swagger_ui_html = swagger_monkey_patch
-
 
 app = FastAPI()
 app.add_middleware(
