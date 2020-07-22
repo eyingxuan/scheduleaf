@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.concurrency import run_in_threadpool
-from ...models.user import db_create_user, User
+from ...models.user import db_create_user, db_get_user, User
 from ...models.task import db_get_tasks, db_update_tasks, UserTasks, UserSchedule
 from ...db.db import AsyncIOMotorClient, get_database
 from ...solver.sentiment import SentimentIntensityAnalyzer, get_analyzer
@@ -12,6 +12,11 @@ router = APIRouter()
 @router.post("/user", response_model=bool)
 async def create_user(user: User, db: AsyncIOMotorClient = Depends(get_database)):
     return await db_create_user(user, db)
+
+
+@router.get("/user", response_model=bool)
+async def get_user(user: User, db: AsyncIOMotorClient = Depends(get_database)):
+    return await db_get_user(user, db)
 
 
 @router.get("/tasks/{username}", response_model=UserTasks)

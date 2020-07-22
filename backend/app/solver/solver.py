@@ -140,5 +140,18 @@ class TaskScheduler:
 
 
 if __name__ == "__main__":
-    scheduler = TaskScheduler([Task(1, None, False, [], None, 160, "A")])
+    task1 = Task(2, None, False, [1], Sentiment.AFT, 56, "A")
+    task2 = Task(5, None, False, [], Sentiment.MORN, 100, "B")
+    task3 = Task(10, None, False, [], Sentiment.MORN, 30, "C")
+    task4 = Task(3, None, True, [1], Sentiment.AFT, 95, "D")
+    task5 = Task(8, None, False, [], Sentiment.MORN, 30, "E")
+    task6 = Task(1, None, False, [4], Sentiment.MORN, 70, "F")
+    task7 = Task(3, None, False, [7], Sentiment.MORN, 120, "G")
+    task8 = Task(12, None, False, [], Sentiment.MORN, 150, "H")
+    task9 = Task(3, None, False, [], Sentiment.MORN, 10, "I")
+    task10 = Task(4, None, False, [], Sentiment.AFT, 140, "J")
+
+    scheduler = TaskScheduler(
+        [task1, task2, task3, task4, task5, task6, task7, task8, task9, task10]
+    )
     print(scheduler.solve_model())
