@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'task_input.dart';
 import 'task_data.dart';
-import "test_response.dart";
 import 'calendar.dart';
 
 class Tasks extends StatefulWidget {
@@ -15,7 +14,6 @@ class Tasks extends StatefulWidget {
 class _TasksState extends State<Tasks> {
   List<TaskData> taskDataList = [];
   Future<bool> taskResponse;
-  Future<TestResponse> calendarResponse;
   String username = 'will'; // TODO: change to username from login
 
   Future<void> _showMyDialog() async {
@@ -43,24 +41,6 @@ class _TasksState extends State<Tasks> {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       return true;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to update task list');
-    }
-  }
-
-  Future<TestResponse> generateCalendar() async {
-    final http.Response response = await http.get(
-      'http://10.0.2.2:8000/tasks/generate/' + username,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return TestResponse.fromJson(json.decode(response.body));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -137,12 +117,12 @@ class _TasksState extends State<Tasks> {
                 ),
                 RaisedButton(
                   onPressed: () {
-                    calendarResponse = generateCalendar();
                     print("response received");
-                    calendarResponse.then((value) => print(value.taskList));
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Calendar()),
+                      MaterialPageRoute(
+                        builder: (context) => Calendar(),
+                      ),
                     );
                   },
                   child: Text('Calendar'),
