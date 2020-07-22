@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:scheduleaf/task_data.dart';
 import 'task_input.dart';
-import 'task_input2.dart';
+import 'task_data.dart';
 
 class Tasks extends StatefulWidget {
   @override
@@ -8,6 +9,8 @@ class Tasks extends StatefulWidget {
 }
 
 class _TasksState extends State<Tasks> {
+  TaskData taskData = TaskData();
+
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
@@ -15,37 +18,7 @@ class _TasksState extends State<Tasks> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Add a task'),
-          content: TaskInput(),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Continue'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _showMyDialog2();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _showMyDialog2() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add a task'),
-          content: TaskInput2(),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Finish'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+          content: TaskInput(taskData: taskData),
         );
       },
     );
@@ -59,6 +32,7 @@ class _TasksState extends State<Tasks> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             RaisedButton(
               onPressed: () {
@@ -76,6 +50,12 @@ class _TasksState extends State<Tasks> {
                   _showMyDialog();
                 },
               ),
+            ),
+            RaisedButton(
+              onPressed: () {
+                print(taskData);
+              },
+              child: Text('Submit'),
             ),
           ],
         ),

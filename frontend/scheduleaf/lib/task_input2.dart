@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'task_data.dart';
 
 class TaskInput2 extends StatefulWidget {
+  final TaskData taskData;
+
+  TaskInput2({Key key, @required this.taskData}) : super(key: key);
+
   @override
-  _TaskInputState2 createState() => _TaskInputState2();
+  _TaskInputState2 createState() => _TaskInputState2(taskData: taskData);
 }
 
 class _TaskInputState2 extends State<TaskInput2> {
+  final TaskData taskData;
+
+  _TaskInputState2({Key key, @required this.taskData});
+
   bool checkboxValue = false;
+  DateTime endTime;
+  DateTime startTime;
+  final hourController = TextEditingController();
+  final minController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +34,7 @@ class _TaskInputState2 extends State<TaskInput2> {
                 flex: 1,
                 child: TextField(
                   decoration: InputDecoration(labelText: 'Hours'),
+                  controller: hourController,
                 ),
               ),
               Padding(
@@ -30,6 +44,7 @@ class _TaskInputState2 extends State<TaskInput2> {
                 flex: 1,
                 child: TextField(
                   decoration: InputDecoration(labelText: 'Minutes'),
+                  controller: minController,
                 ),
               ),
             ],
@@ -42,10 +57,9 @@ class _TaskInputState2 extends State<TaskInput2> {
                       showTitleActions: true,
                       minTime: DateTime(2020, 7, 20, 10, 0),
                       maxTime: DateTime(2020, 7, 24, 18, 0),
-                      onChanged: (date) {},
-                      onConfirm: (date) {},
-                      currentTime: DateTime.now(),
-                      locale: LocaleType.en);
+                      onChanged: (date) {}, onConfirm: (date) {
+                    startTime = date;
+                  }, currentTime: DateTime.now(), locale: LocaleType.en);
                 },
                 child: Text(
                   'Start Time',
@@ -58,10 +72,9 @@ class _TaskInputState2 extends State<TaskInput2> {
                       showTitleActions: true,
                       minTime: DateTime(2020, 7, 20, 10, 0),
                       maxTime: DateTime(2020, 7, 24, 18, 0),
-                      onChanged: (date) {},
-                      onConfirm: (date) {},
-                      currentTime: DateTime.now(),
-                      locale: LocaleType.en);
+                      onChanged: (date) {}, onConfirm: (date) {
+                    endTime = date;
+                  }, currentTime: DateTime.now(), locale: LocaleType.en);
                 },
                 child: Text(
                   'Deadline',
@@ -84,7 +97,22 @@ class _TaskInputState2 extends State<TaskInput2> {
                 },
               ),
             ],
-          )
+          ),
+          FlatButton(
+            child: Text('Finish'),
+            onPressed: () {
+              setState(() {
+                taskData.setInput2Props(
+                  hourController.text,
+                  minController.text,
+                  startTime,
+                  endTime,
+                  checkboxValue,
+                );
+                Navigator.of(context).pop();
+              });
+            },
+          ),
           // TODO: Dependencies
         ],
       ),
