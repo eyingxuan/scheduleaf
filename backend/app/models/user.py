@@ -20,3 +20,12 @@ async def db_create_user(user: User, db: AsyncIOMotorClient) -> bool:
         return False
 
     return True
+
+
+async def db_get_user(user: User, db: AsyncIOMotorClient) -> bool:
+    try:
+        return await db[DATABASE_NAME][USER_COLLECTION].find_one(
+            {"username": user.username}
+        )
+    except Exception:
+        return False
