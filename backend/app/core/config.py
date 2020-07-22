@@ -7,4 +7,5 @@ load_dotenv(".env")
 MONGODB_URI: str = os.getenv("MONGODB_URI")
 
 DATABASE_NAME = "hackathon"
-COLLECTION_NAME = "tasks"
+USER_COLLECTION = "users"
+TASKS_COLLECTION = "tasks"

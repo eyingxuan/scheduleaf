@@ -1,13 +1,12 @@
 from typing import Optional
 from .sentiment import SentimentIntensityAnalyzer
-from ..models.user import User, ScheduledUser
-from ..models.task import ScheduledTask
+from ..models.task import UserTasks, UserSchedule, ScheduledTask
 from .solver import Task, TaskScheduler, Sentiment
 
 
 def plan_schedule(
-    user: User, sentiment: SentimentIntensityAnalyzer
-) -> Optional[ScheduledUser]:
+    user: UserTasks, sentiment: SentimentIntensityAnalyzer
+) -> Optional[UserSchedule]:
     task_pos = {}
     tasks = []
     for i, t in enumerate(user.task_list):
@@ -38,4 +37,4 @@ def plan_schedule(
         for i, t in enumerate(user.task_list):
             scheduled_tasks.append(ScheduledTask(**t.dict(), scheduled_start=ans[i][0]))
 
-        return ScheduledUser(username=user.username, task_list=scheduled_tasks)
+        return UserSchedule(username=user.username, task_list=scheduled_tasks)
