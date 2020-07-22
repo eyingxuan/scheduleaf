@@ -24,6 +24,18 @@ class _TasksState extends State<Tasks> {
     );
   }
 
+  toJson() {
+    List<Object> taskJsonList = [];
+    for (int i = 0; i < taskDataList.length; i++) {
+      taskJsonList.add(taskDataList[i].taskJson(i));
+    }
+
+    return {
+      "username": "will", // TODO: grab from login
+      "task_list": taskJsonList,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,6 +82,7 @@ class _TasksState extends State<Tasks> {
             RaisedButton(
               onPressed: () {
                 print(taskDataList);
+                print(toJson());
               },
               child: Text('Submit'),
             ),
