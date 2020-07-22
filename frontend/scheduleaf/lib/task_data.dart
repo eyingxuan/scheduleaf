@@ -60,7 +60,7 @@ class TaskData {
 
     // if null, return 0
     if (d == null) {
-      return interval;
+      return null;
     }
 
     // add 15*8 intervals for each day past monday
