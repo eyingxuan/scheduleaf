@@ -1,15 +1,13 @@
 class TestResponse {
-  final int id;
-  final String msg;
-  final String name;
+  final String username;
+  final List<dynamic> taskList;
 
-  TestResponse({this.id, this.msg, this.name});
+  TestResponse({this.username, this.taskList});
 
   factory TestResponse.fromJson(Map<String, dynamic> json) {
     return TestResponse(
-      id: json['id'],
-      msg: json['msg'],
-      name: json['name'],
+      username: json['id'],
+      taskList: json['task_list'],
     );
   }
 }

@@ -13,7 +13,9 @@ class Tasks extends StatefulWidget {
 
 class _TasksState extends State<Tasks> {
   List<TaskData> taskDataList = [];
-  Future<bool> responseObject;
+  Future<bool> taskResponse;
+  Future<TestResponse> calendarResponse;
+  String username = 'will'; // TODO: change to username from login
 
   Future<void> _showMyDialog() async {
     return showDialog<void>(
@@ -28,7 +30,7 @@ class _TasksState extends State<Tasks> {
     );
   }
 
-  Future<bool> createResponse() async {
+  Future<bool> submitTasks() async {
     final http.Response response = await http.put(
       'http://10.0.2.2:8000/tasks',
       headers: <String, String>{
@@ -47,6 +49,24 @@ class _TasksState extends State<Tasks> {
     }
   }
 
+  Future<TestResponse> generateCalendar() async {
+    final http.Response response = await http.get(
+      'http://10.0.2.2:8000/tasks/generate/will',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return TestResponse.fromJson(json.decode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to update task list');
+    }
+  }
+
   Map<String, dynamic> toJson() {
     List<dynamic> taskJsonList = [];
     for (int i = 0; i < taskDataList.length; i++) {
@@ -54,7 +74,7 @@ class _TasksState extends State<Tasks> {
     }
 
     return {
-      "username": "will", // TODO: grab from login
+      "username": username, // TODO: grab from login
       "task_list": taskJsonList,
     };
   }
@@ -102,16 +122,28 @@ class _TasksState extends State<Tasks> {
                 },
               ),
             ),
-            RaisedButton(
-              onPressed: () {
-                print(taskDataList);
-                print(toJson());
-                responseObject = createResponse();
-                print("response received");
-                print(responseObject);
-              },
-              child: Text('Submit'),
-            ),
+            ButtonBar(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: () {
+                    print(taskDataList);
+                    print(toJson());
+                    taskResponse = submitTasks();
+                    print("response received");
+                    print(taskResponse);
+                  },
+                  child: Text('Submit'),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    calendarResponse = generateCalendar();
+                    print("response received");
+                    calendarResponse.then((value) => print(value.taskList));
+                  },
+                  child: Text('Calendar'),
+                ),
+              ],
+            )
           ],
         ),
       ),
