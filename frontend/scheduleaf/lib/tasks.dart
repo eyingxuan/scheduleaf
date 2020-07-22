@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'task_input.dart';
 import 'task_data.dart';
 import "test_response.dart";
+import 'calendar.dart';
 
 class Tasks extends StatefulWidget {
   @override
@@ -51,7 +52,7 @@ class _TasksState extends State<Tasks> {
 
   Future<TestResponse> generateCalendar() async {
     final http.Response response = await http.get(
-      'http://10.0.2.2:8000/tasks/generate/will',
+      'http://10.0.2.2:8000/tasks/generate/' + username,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -139,6 +140,10 @@ class _TasksState extends State<Tasks> {
                     calendarResponse = generateCalendar();
                     print("response received");
                     calendarResponse.then((value) => print(value.taskList));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Calendar()),
+                    );
                   },
                   child: Text('Calendar'),
                 ),
