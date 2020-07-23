@@ -110,72 +110,69 @@ class _TasksState extends State<Tasks> {
         child: ValueListenableBuilder<List<dynamic>>(
           valueListenable: taskDataList,
           builder: (context, value, child) {
-            return Column(
-              children: <Widget>[
-                RaisedButton(
-                  onPressed: () {
-                    // Navigate back to first route when tapped.
-                    Navigator.pop(context);
-                  },
-                  child: Text('Logout'),
-                ),
-                Container(
-                  child: new ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: taskDataList.value.length,
-                    itemBuilder: (BuildContext ctxt, int index) {
-                      return new Card(
-                        child: ListTile(
-                          title: Text(taskDataList.value[index].name),
-                          leading: Icon(Icons.check_circle_outline),
-                          trailing: Icon(Icons.more_vert),
-                          key: UniqueKey(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Card(
-                  child: ListTile(
-                    title: Text('Add a task'),
-                    leading: Icon(Icons.add_circle_outline),
-                    onTap: () {
-                      /* react to the tile being tapped */
-                      setState(() {
-                        TaskData taskData = TaskData();
-                        _showMyDialog(taskData);
-                        // taskDataList.add(taskData);
-                      });
-                    },
-                  ),
-                ),
-                ButtonBar(
-                  children: <Widget>[
-                    RaisedButton(
-                      onPressed: () {
-                        print(taskDataList);
-                        print(toJson());
-                        taskResponse = submitTasks();
-                        print("response received");
-                        print(taskResponse);
-                      },
-                      child: Text('Submit'),
-                    ),
-                    RaisedButton(
-                      onPressed: () {
-                        print("response received");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Calendar(username: username),
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: new ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: taskDataList.value.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext ctxt, int index) {
+                        return new Card(
+                          child: ListTile(
+                            title: Text(taskDataList.value[index].name),
+                            leading: Icon(Icons.check_circle_outline),
+                            trailing: Icon(Icons.more_vert),
+                            key: UniqueKey(),
                           ),
                         );
                       },
-                      child: Text('Calendar'),
                     ),
-                  ],
-                )
-              ],
+                  ),
+                  Card(
+                    child: ListTile(
+                      title: Text('Add a task'),
+                      leading: Icon(Icons.add_circle_outline),
+                      onTap: () {
+                        /* react to the tile being tapped */
+                        setState(() {
+                          TaskData taskData = TaskData();
+                          _showMyDialog(taskData);
+                          // taskDataList.add(taskData);
+                        });
+                      },
+                    ),
+                  ),
+                  ButtonBar(
+                    children: <Widget>[
+                      RaisedButton(
+                        onPressed: () {
+                          print(taskDataList);
+                          print(toJson());
+                          taskResponse = submitTasks();
+                          print("response received");
+                          print(taskResponse);
+                        },
+                        child: Text('Submit'),
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          print("response received");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Calendar(username: username),
+                            ),
+                          );
+                        },
+                        child: Text('Calendar'),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             );
           },
         ),

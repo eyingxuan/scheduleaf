@@ -41,6 +41,7 @@ class _TaskInputState3 extends State<TaskInput3> {
             child: new ListView.builder(
               shrinkWrap: true,
               itemCount: taskDataList.value.length,
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext ctxt, int index) {
                 return new Card(
                   child: CheckboxListTile(
