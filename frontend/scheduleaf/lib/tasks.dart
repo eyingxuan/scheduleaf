@@ -62,7 +62,7 @@ class _TasksState extends State<Tasks> {
     }
 
     return {
-      "username": username, // TODO: grab from login
+      "username": username,
       "task_list": taskJsonList,
     };
   }

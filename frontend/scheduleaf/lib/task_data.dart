@@ -112,7 +112,7 @@ class TaskData {
       "deadline": timeInterval(end),
       "start_time": timeInterval(start),
       "concurrent": isConcurrent,
-      "precedes": [],
+      "precedes": precedes,
       "description": description
     };
   }
