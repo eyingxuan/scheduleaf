@@ -1,6 +1,10 @@
 from ortools.sat.python import cp_model
 from enum import Enum
 
+# TODO: FEEDBACK
+# - Add constraint to force tasks to stay on the same day
+# - Add constraint to encourage breaks between tasks
+
 
 class Sentiment(Enum):
     MORN = 1
