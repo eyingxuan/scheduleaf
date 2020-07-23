@@ -149,7 +149,6 @@ class _TasksState extends State<Tasks> {
                         child: ListTile(
                           title: Text(taskDataList.value[index].name),
                           leading: Icon(Icons.check_circle_outline),
-                          trailing: Icon(Icons.more_vert),
                           key: UniqueKey(),
                         ),
                       );
@@ -170,19 +169,22 @@ class _TasksState extends State<Tasks> {
                     },
                   ),
                 ),
-                RaisedButton(
-                  onPressed: () {
-                    print(taskDataList);
-                    print(toJson());
-                    taskResponse = submitTasks();
-                    print("response received");
-                    print(taskResponse);
-                  },
-                  child: Text(
-                    'Submit',
-                    style: TextStyle(color: Colors.white),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  child: RaisedButton(
+                    onPressed: () {
+                      print(taskDataList);
+                      print(toJson());
+                      taskResponse = submitTasks();
+                      print("response received");
+                      print(taskResponse);
+                    },
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    color: Colors.green,
                   ),
-                  color: Colors.green,
                 ),
               ],
             ),
