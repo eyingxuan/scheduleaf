@@ -2,7 +2,6 @@ from ortools.sat.python import cp_model
 from enum import Enum
 
 # TODO: FEEDBACK
-# - Add constraint to force tasks to stay on the same day
 # - Add constraint to encourage breaks between tasks
 
 
@@ -82,6 +81,19 @@ class TaskScheduler:
             for succ in t.precedes:
                 self.model.Add(self.schedule[i].end <= self.schedule[succ].start)
 
+    def create_nosplit_constraints(self):
+        model = self.model
+        for s in self.schedule:
+            start_r, end_r = (
+                model.NewIntVar(0, DAYS - 1, ""),
+                model.NewIntVar(0, DAYS - 1, ""),
+            )
+            end_m_one = model.NewIntVar(0, NUM_SLOTS, "")
+            model.Add(s.end == end_m_one + 1)
+            model.AddDivisionEquality(start_r, s.start, WORKING_HOURS * SUBDIVISIONS)
+            model.AddDivisionEquality(end_r, end_m_one, WORKING_HOURS * SUBDIVISIONS)
+            model.Add(start_r == end_r)
+
     def create_scheduling_penalties(self):
         cumul = 0
         for i, s in enumerate(self.schedule):
@@ -129,6 +141,7 @@ class TaskScheduler:
         self.create_interval_variables()
         self.create_overlapping_constraints()
         self.create_precedence_constraints()
+        self.create_nosplit_constraints()
         self.create_penalties()
         self.model.Minimize(self.penalty)
 
