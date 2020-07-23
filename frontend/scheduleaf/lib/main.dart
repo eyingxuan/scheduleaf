@@ -54,36 +54,39 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Text(
-              'TODO: Logo here',
-              style: TextStyle(fontSize: 30.0),
+            Image(
+              image: AssetImage('assets/logo.png'),
+              height: 160.0,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 40.0),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-              child: TextField(
-                controller: usernameController,
-                decoration: InputDecoration(labelText: 'Enter your username'),
-              ),
-            ),
-            FlatButton(
-              onPressed: () {
-                setState(() {
-                  print(usernameController.text);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Tasks()),
-                  );
-                  // dispose();
-                });
-              },
-              child: Text(
-                "Login",
-              ),
+            Column(
+              children: <Widget>[
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                  child: TextField(
+                    controller: usernameController,
+                    decoration:
+                        InputDecoration(labelText: 'Enter your username'),
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    setState(() {
+                      print(usernameController.text);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Tasks()),
+                      );
+                      // dispose();
+                    });
+                  },
+                  child: Text(
+                    "Login",
+                  ),
+                ),
+              ],
             ),
           ],
         ),
