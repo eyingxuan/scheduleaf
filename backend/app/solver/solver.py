@@ -1,9 +1,6 @@
 from ortools.sat.python import cp_model
 from enum import Enum
 
-# TODO: FEEDBACK
-# - Add constraint to encourage breaks between tasks
-
 
 class Sentiment(Enum):
     MORN = 1
@@ -120,12 +117,12 @@ class TaskScheduler:
                 sched_penalty = self.model.NewIntVar(0, 5000, "")
                 indicator = self.model.NewBoolVar("tmp >= half work day?")
                 self.model.AddModuloEquality(tmp, s.start, WORKING_HOURS * SUBDIVISIONS)
-                self.model.Add(tmp >= WORKING_HOURS * SUBDIVISIONS // 2).OnlyEnforceIf(
+                self.model.Add(tmp >= WORKING_HOURS * SUBDIVISIONS // 4).OnlyEnforceIf(
                     indicator
                     if self.tasks[i].sentiment == Sentiment.MORN
                     else indicator.Not()
                 )
-                self.model.Add(tmp < WORKING_HOURS * SUBDIVISIONS // 2).OnlyEnforceIf(
+                self.model.Add(tmp < WORKING_HOURS * SUBDIVISIONS // 4).OnlyEnforceIf(
                     indicator.Not()
                     if self.tasks[i].sentiment == Sentiment.MORN
                     else indicator
