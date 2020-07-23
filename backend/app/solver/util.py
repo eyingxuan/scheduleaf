@@ -18,7 +18,7 @@ def plan_schedule(
             t.concurrent,
             [],
             Sentiment.MORN if polarity["compound"] < 0 else Sentiment.AFT,
-            t.deadline if t.deadline else 160,
+            t.deadline,
             t.title,
         )
         tasks.append(task)

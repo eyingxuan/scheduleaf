@@ -24,7 +24,7 @@ def deadline_penalty(end, deadline, model: cp_model.CpModel):
     model.Add(deadline - end <= slots).OnlyEnforceIf(flag.Not())
     penalty = model.NewIntVar(0, 160, "penalty")
     model.Add(slots - deadline + end == penalty).OnlyEnforceIf(flag.Not())
-    model.Add(96 - (deadline - end - slots) == penalty).OnlyEnforceIf(flag)
+    model.Add(deadline - end - slots == penalty).OnlyEnforceIf(flag)
     return penalty
     # return DEADLINE_PENALTY_CONSTANT * (NUM_SLOTS - (deadline - end))
 
@@ -67,7 +67,8 @@ class TaskScheduler:
                     f"Task {t.name} end",
                 )
 
-            model.Add(end <= t.deadline)
+            if t.deadline:
+                model.Add(end <= t.deadline)
             interval = model.NewIntervalVar(
                 start, t.duration, end, f"Task {t.name} interval"
             )
@@ -101,12 +102,13 @@ class TaskScheduler:
     def create_scheduling_penalties(self):
         cumul = 0
         for i, s in enumerate(self.schedule):
-            tmp = self.model.NewIntVar(-400, 400, "")
-            squared = self.model.NewIntVar(0, 3000000, "")
-            p = deadline_penalty(s.end, self.tasks[i].deadline, self.model)
-            self.model.Add(tmp == p)
-            self.model.AddMultiplicationEquality(squared, [tmp, tmp])
-            cumul += squared
+            if self.tasks[i].deadline:
+                tmp = self.model.NewIntVar(-400, 400, "")
+                squared = self.model.NewIntVar(0, 3000000, "")
+                p = deadline_penalty(s.end, self.tasks[i].deadline, self.model)
+                self.model.Add(tmp == p)
+                self.model.AddMultiplicationEquality(squared, [tmp, tmp])
+                cumul += squared
         return cumul
 
     def create_sentiment_penalties(self):
