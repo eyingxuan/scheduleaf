@@ -19,13 +19,18 @@ class _CalendarState extends State<Calendar> {
 
   @override
   void initState() {
-    calendarResponse = generateCalendar();
-    print("response received");
-    calendarResponse.then((calendarObj) => calendarData = calendarObj);
+    generateCalendar();
     super.initState();
   }
 
-  Future<CalendarResponse> generateCalendar() async {
+  generateCalendar() async {
+    var temp = await generateCalendarRequest();
+    setState(() {
+      calendarData = temp;
+    });
+  }
+
+  Future<CalendarResponse> generateCalendarRequest() async {
     final http.Response response = await http.get(
       'http://10.0.2.2:8000/tasks/generate/' + 'will', // TODO - username
       headers: <String, String>{
@@ -44,6 +49,11 @@ class _CalendarState extends State<Calendar> {
   }
 
   List<FlutterWeekViewEvent> generateEvents() {
+    // handle initial load before request finishes
+    if (calendarData == null) {
+      return [];
+    }
+
     List<FlutterWeekViewEvent> events = [];
     for (int i = 0; i < calendarData.taskList.length; i++) {
       CalendarTask task = calendarData.taskList[i];
