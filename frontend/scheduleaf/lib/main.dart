@@ -31,14 +31,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
 
-  void submitForm() {
-    // TODO
-
-//    setState(() {
-//      _counter++;
-//    });
-  }
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -77,7 +69,10 @@ class _LoginPageState extends State<LoginPage> {
                       print(usernameController.text);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Tasks()),
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Tasks(username: usernameController.text),
+                        ),
                       );
                       // dispose();
                     });

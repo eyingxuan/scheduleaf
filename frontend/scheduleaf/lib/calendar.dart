@@ -5,11 +5,17 @@ import 'dart:convert';
 import 'calendar_response.dart';
 
 class Calendar extends StatefulWidget {
+  final String username;
+  Calendar({Key key, @required this.username}) : super(key: key);
+
   @override
-  _CalendarState createState() => _CalendarState();
+  _CalendarState createState() => _CalendarState(username: username);
 }
 
 class _CalendarState extends State<Calendar> {
+  final String username;
+  _CalendarState({Key key, @required this.username});
+
   Future<CalendarResponse> calendarResponse;
 
   CalendarResponse calendarData;
@@ -32,7 +38,7 @@ class _CalendarState extends State<Calendar> {
 
   Future<CalendarResponse> generateCalendarRequest() async {
     final http.Response response = await http.get(
-      'http://10.0.2.2:8000/tasks/generate/' + 'will', // TODO - username
+      'http://10.0.2.2:8000/tasks/generate/$username',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -44,7 +50,7 @@ class _CalendarState extends State<Calendar> {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to update task list');
+      throw Exception('Failed to update task list with username: $username');
     }
   }
 

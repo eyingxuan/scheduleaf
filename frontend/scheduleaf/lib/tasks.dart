@@ -9,14 +9,21 @@ import 'task_data.dart';
 import 'calendar.dart';
 
 class Tasks extends StatefulWidget {
+  final String username;
+
+  Tasks({Key key, @required this.username}) : super(key: key);
+
   @override
-  _TasksState createState() => _TasksState();
+  _TasksState createState() => _TasksState(username: username);
 }
 
 class _TasksState extends State<Tasks> {
+  final String username;
+
+  _TasksState({Key key, @required this.username});
+
   final taskDataList = new ValueNotifier([]);
   Future<bool> taskResponse;
-  String username = 'will'; // TODO: change to username from login
 
   Future<void> _showMyDialog(TaskData taskData) async {
     return showDialog<void>(
@@ -138,7 +145,7 @@ class _TasksState extends State<Tasks> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Calendar(),
+                            builder: (context) => Calendar(username: username),
                           ),
                         );
                       },
