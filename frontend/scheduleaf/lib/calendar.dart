@@ -13,6 +13,7 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
+  int selectedIndex = 1;
   final String username;
   _CalendarState({Key key, @required this.username});
 
@@ -22,6 +23,14 @@ class _CalendarState extends State<Calendar> {
 
   DateTime startDate =
       DateTime(2020, 7, 20, 10, 0, 0); // TODO - don't hardcode?
+
+  void onItemTapped(int index) {
+    setState(() {
+      if (index == 0) {
+        Navigator.of(context).pop();
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -112,6 +121,22 @@ class _CalendarState extends State<Calendar> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Calendar"),
+        leading: new Container(),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        selectedItemColor: Colors.green,
+        onTap: onItemTapped,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
+            title: Text('Tasks'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            title: Text('Calendar'),
+          ),
+        ],
       ),
       body: Center(
         child: Container(
@@ -124,8 +149,8 @@ class _CalendarState extends State<Calendar> {
               startDate.add(Duration(days: 4))
             ],
             events: generateEvents(),
-            minimumTime: HourMinute(hour: 9, minute: 45),
-            maximumTime: HourMinute(hour: 18, minute: 15),
+            minimumTime: HourMinute(hour: 9, minute: 47),
+            maximumTime: HourMinute(hour: 18, minute: 13),
             scrollToCurrentTime: false,
             userZoomable: false,
             dayViewStyleBuilder: (DateTime date) => DayViewStyle(

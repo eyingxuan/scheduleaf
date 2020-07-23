@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                         InputDecoration(labelText: 'Enter your username'),
                   ),
                 ),
-                FlatButton(
+                RaisedButton(
                   onPressed: () {
                     setState(() {
                       print(usernameController.text);
@@ -78,8 +78,10 @@ class _LoginPageState extends State<LoginPage> {
                     });
                   },
                   child: Text(
-                    "Login",
+                    'Login',
+                    style: TextStyle(color: Colors.white),
                   ),
+                  color: Colors.green,
                 ),
               ],
             ),

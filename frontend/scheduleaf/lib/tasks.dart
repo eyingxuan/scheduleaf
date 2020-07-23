@@ -3,8 +3,6 @@ import 'package:scheduleaf/task_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'task_data.dart';
-import 'task_data.dart';
-import 'task_data.dart';
 import 'task_input.dart';
 import 'calendar.dart';
 
@@ -19,11 +17,25 @@ class Tasks extends StatefulWidget {
 
 class _TasksState extends State<Tasks> {
   final String username;
+  int selectedIndex = 0;
 
   _TasksState({Key key, @required this.username});
 
   var taskDataList = new ValueNotifier([]);
   Future<bool> taskResponse;
+
+  void onItemTapped(int index) {
+    setState(() {
+      if (index == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Calendar(username: username),
+          ),
+        );
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -106,76 +118,76 @@ class _TasksState extends State<Tasks> {
       appBar: AppBar(
         title: Text("Tasks"),
       ),
-      body: Center(
-        child: ValueListenableBuilder<List<dynamic>>(
-          valueListenable: taskDataList,
-          builder: (context, value, child) {
-            return SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: new ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: taskDataList.value.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (BuildContext ctxt, int index) {
-                        return new Card(
-                          child: ListTile(
-                            title: Text(taskDataList.value[index].name),
-                            leading: Icon(Icons.check_circle_outline),
-                            trailing: Icon(Icons.more_vert),
-                            key: UniqueKey(),
-                          ),
-                        );
-                      },
-                    ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        selectedItemColor: Colors.green,
+        onTap: onItemTapped,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
+            title: Text('Tasks'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            title: Text('Calendar'),
+          ),
+        ],
+      ),
+      body: ValueListenableBuilder<List<dynamic>>(
+        valueListenable: taskDataList,
+        builder: (context, value, child) {
+          return SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: new ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: taskDataList.value.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return new Card(
+                        child: ListTile(
+                          title: Text(taskDataList.value[index].name),
+                          leading: Icon(Icons.check_circle_outline),
+                          trailing: Icon(Icons.more_vert),
+                          key: UniqueKey(),
+                        ),
+                      );
+                    },
                   ),
-                  Card(
-                    child: ListTile(
-                      title: Text('Add a task'),
-                      leading: Icon(Icons.add_circle_outline),
-                      onTap: () {
-                        /* react to the tile being tapped */
-                        setState(() {
-                          TaskData taskData = TaskData();
-                          _showMyDialog(taskData);
-                          // taskDataList.add(taskData);
-                        });
-                      },
-                    ),
+                ),
+                Card(
+                  child: ListTile(
+                    title: Text('Add a task'),
+                    leading: Icon(Icons.add_circle_outline),
+                    onTap: () {
+                      /* react to the tile being tapped */
+                      setState(() {
+                        TaskData taskData = TaskData();
+                        _showMyDialog(taskData);
+                        // taskDataList.add(taskData);
+                      });
+                    },
                   ),
-                  ButtonBar(
-                    children: <Widget>[
-                      RaisedButton(
-                        onPressed: () {
-                          print(taskDataList);
-                          print(toJson());
-                          taskResponse = submitTasks();
-                          print("response received");
-                          print(taskResponse);
-                        },
-                        child: Text('Submit'),
-                      ),
-                      RaisedButton(
-                        onPressed: () {
-                          print("response received");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  Calendar(username: username),
-                            ),
-                          );
-                        },
-                        child: Text('Calendar'),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    print(taskDataList);
+                    print(toJson());
+                    taskResponse = submitTasks();
+                    print("response received");
+                    print(taskResponse);
+                  },
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  color: Colors.green,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
