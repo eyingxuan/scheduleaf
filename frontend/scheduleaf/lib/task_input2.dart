@@ -1,20 +1,26 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'task_data.dart';
 
 class TaskInput2 extends StatefulWidget {
   final TaskData taskData;
+  final ValueNotifier<List<dynamic>> taskDataList;
 
-  TaskInput2({Key key, @required this.taskData}) : super(key: key);
+  TaskInput2({Key key, @required this.taskData, @required this.taskDataList})
+      : super(key: key);
 
   @override
-  _TaskInputState2 createState() => _TaskInputState2(taskData: taskData);
+  _TaskInputState2 createState() =>
+      _TaskInputState2(taskData: taskData, taskDataList: taskDataList);
 }
 
 class _TaskInputState2 extends State<TaskInput2> {
   final TaskData taskData;
+  final ValueNotifier<List<dynamic>> taskDataList;
 
-  _TaskInputState2({Key key, @required this.taskData});
+  _TaskInputState2(
+      {Key key, @required this.taskData, @required this.taskDataList});
 
   bool checkboxValue = false;
   DateTime endTime;
@@ -109,6 +115,8 @@ class _TaskInputState2 extends State<TaskInput2> {
                   endTime,
                   checkboxValue,
                 );
+                taskDataList.value.add(taskData);
+                taskDataList.notifyListeners();
                 Navigator.of(context).pop();
               });
             },

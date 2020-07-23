@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:scheduleaf/task_data.dart';
 import 'task_data.dart';
@@ -5,16 +6,22 @@ import 'task_input2.dart';
 
 class TaskInput extends StatefulWidget {
   final TaskData taskData;
+  final ValueNotifier<List<dynamic>> taskDataList;
 
-  TaskInput({Key key, @required this.taskData}) : super(key: key);
+  TaskInput({Key key, @required this.taskData, @required this.taskDataList})
+      : super(key: key);
 
   @override
-  _TaskInputState createState() => _TaskInputState(taskData: taskData);
+  _TaskInputState createState() =>
+      _TaskInputState(taskData: taskData, taskDataList: taskDataList);
 }
 
 class _TaskInputState extends State<TaskInput> {
   final TaskData taskData;
-  _TaskInputState({Key key, @required this.taskData});
+  final ValueNotifier<List<dynamic>> taskDataList;
+
+  _TaskInputState(
+      {Key key, @required this.taskData, @required this.taskDataList});
 
   final nameController = TextEditingController();
   final descController = TextEditingController();
@@ -26,7 +33,7 @@ class _TaskInputState extends State<TaskInput> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Add a task'),
-          content: TaskInput2(taskData: taskData),
+          content: TaskInput2(taskData: taskData, taskDataList: taskDataList),
         );
       },
     );
