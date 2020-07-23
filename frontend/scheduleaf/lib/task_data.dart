@@ -5,6 +5,7 @@ class TaskData {
   DateTime start;
   DateTime end;
   bool isConcurrent;
+  List<int> precedes;
 
   TaskData() {
     name = '';
@@ -13,6 +14,7 @@ class TaskData {
     start = null;
     end = null;
     isConcurrent = false;
+    precedes = [];
   }
 
   TaskData.fullConstructor(String n, String desc, int hours, int mins,
@@ -50,6 +52,14 @@ class TaskData {
     start = s;
     end = e;
     isConcurrent = concur;
+  }
+
+  setInput3Props(List<bool> dependencies) {
+    for (int i = 0; i < dependencies.length; i++) {
+      if (dependencies[i]) {
+        precedes.add(i);
+      }
+    }
   }
 
   // Return a number between 0 and 160 representing which time interval the

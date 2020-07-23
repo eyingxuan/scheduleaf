@@ -3,9 +3,7 @@ import 'package:scheduleaf/task_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'task_data.dart';
-import 'task_data.dart';
 import 'task_input.dart';
-import 'task_data.dart';
 import 'calendar.dart';
 
 class Tasks extends StatefulWidget {
@@ -68,15 +66,6 @@ class _TasksState extends State<Tasks> {
       "task_list": taskJsonList,
     };
   }
-
-//  listWithoutEmpty() {
-//    if (taskDataList.length > 0 &&
-//        taskDataList[taskDataList.length - 1].durationMinutes == 0) {
-//      return taskDataList.sublist(0, taskDataList.length - 1);
-//    } else {
-//      return taskDataList;
-//    }
-//  }
 
   @override
   Widget build(BuildContext context) {

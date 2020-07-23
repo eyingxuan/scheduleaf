@@ -21,7 +21,14 @@ class _TaskInputState3 extends State<TaskInput3> {
   _TaskInputState3(
       {Key key, @required this.taskData, @required this.taskDataList});
 
-  bool checkboxValue = false;
+  List<bool> checkboxList = [];
+
+  @override
+  void initState() {
+    checkboxList =
+        new List<bool>.filled(taskDataList.value.length, false, growable: true);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +45,10 @@ class _TaskInputState3 extends State<TaskInput3> {
                 return new Card(
                   child: CheckboxListTile(
                     title: Text(taskDataList.value[index].name),
-                    value: checkboxValue,
+                    value: checkboxList[index],
                     onChanged: (bool value) {
                       setState(() {
-                        checkboxValue = value;
+                        checkboxList[index] = value;
                       });
                     },
                   ),
@@ -53,16 +60,10 @@ class _TaskInputState3 extends State<TaskInput3> {
             child: Text('Finish'),
             onPressed: () {
               setState(() {
-                // TODO: set procedes in the task
-//                taskData.setInput3Props(
-//                  hourController.text,
-//                  minController.text,
-//                  startTime,
-//                  endTime,
-//                  checkboxValue,
-//                );
-                taskDataList.value.add(taskData);
+                taskData.setInput3Props(checkboxList);
                 Navigator.of(context).pop();
+                checkboxList.add(false);
+                taskDataList.value.add(taskData);
                 taskDataList.notifyListeners();
               });
             },
