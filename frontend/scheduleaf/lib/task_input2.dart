@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'task_data.dart';
+import 'task_input3.dart';
 
 class TaskInput2 extends StatefulWidget {
   final TaskData taskData;
@@ -27,6 +28,19 @@ class _TaskInputState2 extends State<TaskInput2> {
   DateTime startTime;
   final hourController = TextEditingController();
   final minController = TextEditingController();
+
+  Future<void> _showMyDialog3() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add a task'),
+          content: TaskInput3(taskData: taskData, taskDataList: taskDataList),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +119,7 @@ class _TaskInputState2 extends State<TaskInput2> {
             ],
           ),
           FlatButton(
-            child: Text('Finish'),
+            child: Text('Continue'),
             onPressed: () {
               setState(() {
                 taskData.setInput2Props(
@@ -115,9 +129,8 @@ class _TaskInputState2 extends State<TaskInput2> {
                   endTime,
                   checkboxValue,
                 );
-                taskDataList.value.add(taskData);
-                taskDataList.notifyListeners();
                 Navigator.of(context).pop();
+                _showMyDialog3();
               });
             },
           ),
