@@ -53,7 +53,14 @@ class _CalendarState extends State<Calendar> {
           description: task.description,
           start: convertIntervalToDate(task.scheduledStart, false),
           end: convertIntervalToDate(task.scheduledStart + task.duration, true),
-          backgroundColor: Colors.green,
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: Colors.black45,
+              width: 2,
+            ),
+          ),
         ),
       );
     }
@@ -101,11 +108,14 @@ class _CalendarState extends State<Calendar> {
               startDate.add(Duration(days: 4))
             ],
             events: generateEvents(),
-            style: const WeekViewStyle(),
             minimumTime: HourMinute(hour: 9, minute: 45),
             maximumTime: HourMinute(hour: 18, minute: 15),
             scrollToCurrentTime: false,
             userZoomable: false,
+            dayViewStyleBuilder: (DateTime date) => DayViewStyle(
+              currentTimeRuleColor: Colors.pink,
+              currentTimeCircleColor: Colors.pink,
+            ),
           ),
         ),
       ),
