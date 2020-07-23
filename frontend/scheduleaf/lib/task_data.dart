@@ -1,27 +1,42 @@
+import 'dart:convert';
+
 class TaskData {
   String name;
   String description;
-  int durationMinutes;
-  DateTime start;
-  DateTime end;
+  int duration;
+  int start;
+  int end;
   bool isConcurrent;
   List<int> precedes;
 
   TaskData() {
     name = '';
     description = '';
-    durationMinutes = 0;
-    start = null;
-    end = null;
+    duration = 0;
+    start = 0;
+    end = 0;
     isConcurrent = false;
     precedes = [];
   }
 
-  TaskData.fullConstructor(String n, String desc, int hours, int mins,
-      DateTime s, DateTime e, bool concur) {
+  TaskData.fromJson(Map<String, dynamic> json) {
+    this.name = json['title'];
+    this.duration = json['duration'];
+    this.end = json['deadline'];
+    this.start = json['start_time'];
+    this.isConcurrent = json['concurrent'];
+    this.precedes = [];
+    for (int i = 0; i < json['precedes'].length; i++) {
+      this.precedes.add(json['precedes'][i]);
+    }
+    this.description = json['description'];
+  }
+
+  TaskData.fullConstructor(
+      String n, String desc, int hours, int mins, int s, int e, bool concur) {
     name = n;
     description = desc;
-    durationMinutes = (60 * hours) + mins;
+    duration = convertMinutesToSlots((60 * hours) + mins);
     start = s;
     end = e;
     isConcurrent = concur;
@@ -48,9 +63,9 @@ class TaskData {
       m = 0;
     }
 
-    durationMinutes = (60 * h) + m;
-    start = s;
-    end = e;
+    duration = convertMinutesToSlots((60 * h) + m);
+    start = timeInterval(s);
+    end = timeInterval(e);
     isConcurrent = concur;
   }
 
@@ -101,19 +116,38 @@ class TaskData {
   }
 
   int convertMinutesToSlots(int mins) {
-    return durationMinutes ~/ 15;
+    return mins ~/ 15;
   }
 
   Map<String, dynamic> taskJson(id) {
     return {
       "task_id": id,
       "title": name,
-      "duration": convertMinutesToSlots(durationMinutes),
-      "deadline": timeInterval(end),
-      "start_time": timeInterval(start),
+      "duration": duration,
+      "deadline": end,
+      "start_time": start,
       "concurrent": isConcurrent,
       "precedes": precedes,
       "description": description
     };
+  }
+}
+
+class TaskResponse {
+  final String username;
+  final List<TaskData> taskList;
+
+  TaskResponse({this.username, this.taskList});
+
+  factory TaskResponse.fromJson(Map<String, dynamic> json) {
+    List<TaskData> taskList = [];
+    for (var i = 0; i < json['task_list'].length; i++) {
+      taskList.add(new TaskData.fromJson(json['task_list'][i]));
+    }
+
+    return TaskResponse(
+      username: json['username'],
+      taskList: taskList,
+    );
   }
 }

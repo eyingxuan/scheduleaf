@@ -3,6 +3,8 @@ import 'package:scheduleaf/task_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'task_data.dart';
+import 'task_data.dart';
+import 'task_data.dart';
 import 'task_input.dart';
 import 'calendar.dart';
 
@@ -20,8 +22,39 @@ class _TasksState extends State<Tasks> {
 
   _TasksState({Key key, @required this.username});
 
-  final taskDataList = new ValueNotifier([]);
+  var taskDataList = new ValueNotifier([]);
   Future<bool> taskResponse;
+
+  @override
+  void initState() {
+    generateExistingTasks();
+    super.initState();
+  }
+
+  generateExistingTasks() async {
+    var response = await generateExistingTasksRequest();
+    setState(() {
+      taskDataList.value = response.taskList;
+    });
+  }
+
+  Future<TaskResponse> generateExistingTasksRequest() async {
+    final http.Response response = await http.get(
+      'http://10.0.2.2:8000/tasks/$username',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return TaskResponse.fromJson(json.decode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to update task list with username: $username');
+    }
+  }
 
   Future<void> _showMyDialog(TaskData taskData) async {
     return showDialog<void>(
