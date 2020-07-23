@@ -1,9 +1,6 @@
 from ortools.sat.python import cp_model
 from enum import Enum
 
-# TODO: FEEDBACK
-# - Add constraint to encourage breaks between tasks
-
 
 class Sentiment(Enum):
     MORN = 1
@@ -19,10 +16,17 @@ DEADLINE_PENALTY_CONSTANT = 1
 SENTIMENT_PENALTY_CONSTANT = 3000
 
 # PRIORITY FUNCTION
-
-
-def deadline_penalty(end, deadline):
-    return DEADLINE_PENALTY_CONSTANT * (NUM_SLOTS - (deadline - end))
+# end: var, deadline: int, model: CPModel
+def deadline_penalty(end, deadline, model: cp_model.CpModel):
+    slots = WORKING_HOURS * SUBDIVISIONS * 2
+    flag = model.NewBoolVar("more than 2 days")
+    model.Add(deadline - end > slots).OnlyEnforceIf(flag)
+    model.Add(deadline - end <= slots).OnlyEnforceIf(flag.Not())
+    penalty = model.NewIntVar(0, 160, "penalty")
+    model.Add(slots - deadline + end == penalty).OnlyEnforceIf(flag.Not())
+    model.Add(96 - (deadline - end - slots) == penalty).OnlyEnforceIf(flag)
+    return penalty
+    # return DEADLINE_PENALTY_CONSTANT * (NUM_SLOTS - (deadline - end))
 
 
 class Task:
@@ -99,7 +103,7 @@ class TaskScheduler:
         for i, s in enumerate(self.schedule):
             tmp = self.model.NewIntVar(-400, 400, "")
             squared = self.model.NewIntVar(0, 3000000, "")
-            p = deadline_penalty(s.end, self.tasks[i].deadline)
+            p = deadline_penalty(s.end, self.tasks[i].deadline, self.model)
             self.model.Add(tmp == p)
             self.model.AddMultiplicationEquality(squared, [tmp, tmp])
             cumul += squared
@@ -113,12 +117,12 @@ class TaskScheduler:
                 sched_penalty = self.model.NewIntVar(0, 5000, "")
                 indicator = self.model.NewBoolVar("tmp >= half work day?")
                 self.model.AddModuloEquality(tmp, s.start, WORKING_HOURS * SUBDIVISIONS)
-                self.model.Add(tmp >= WORKING_HOURS * SUBDIVISIONS // 2).OnlyEnforceIf(
+                self.model.Add(tmp >= WORKING_HOURS * SUBDIVISIONS // 4).OnlyEnforceIf(
                     indicator
                     if self.tasks[i].sentiment == Sentiment.MORN
                     else indicator.Not()
                 )
-                self.model.Add(tmp < WORKING_HOURS * SUBDIVISIONS // 2).OnlyEnforceIf(
+                self.model.Add(tmp < WORKING_HOURS * SUBDIVISIONS // 4).OnlyEnforceIf(
                     indicator.Not()
                     if self.tasks[i].sentiment == Sentiment.MORN
                     else indicator

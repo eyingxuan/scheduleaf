@@ -21,7 +21,7 @@ class TestConstraintSolver(unittest.TestCase):
                 Task(3, None, False, [1], None, 140, "Task2"),
             ]
         )
-        self.assertListEqual(scheduler.solve_model(), [(13, 14), (3, 13), (0, 3)])
+        self.assertListEqual(scheduler.solve_model(), [(94, 95), (3, 13), (0, 3)])
 
     def test_dependencies_resp(self):
         scheduler = TaskScheduler(
@@ -39,7 +39,7 @@ class TestConstraintSolver(unittest.TestCase):
                 Task(3, None, False, [], None, 140, "Task2"),
             ]
         )
-        self.assertListEqual(scheduler.solve_model(), [(0, 1), (1, 4)])
+        self.assertListEqual(scheduler.solve_model(), [(0, 1), (73, 76)])
 
     def test_infeasible_provided(self):
         scheduler = TaskScheduler(
@@ -57,7 +57,7 @@ class TestConstraintSolver(unittest.TestCase):
                 Task(3, None, False, [], None, 140, "Task2"),
             ]
         )
-        self.assertListEqual(scheduler.solve_model(), [(0, 3), (3, 6)])
+        self.assertListEqual(scheduler.solve_model(), [(0, 3), (73, 76)])
 
 
 if __name__ == "__main__":
