@@ -82,8 +82,8 @@ class TaskScheduler:
 
     def create_precedence_constraints(self):
         for i, t in enumerate(self.tasks):
-            for succ in t.precedes:
-                self.model.Add(self.schedule[i].end <= self.schedule[succ].start)
+            for prec in t.precedes:
+                self.model.Add(self.schedule[prec].end <= self.schedule[i].start)
 
     def create_nosplit_constraints(self):
         model = self.model

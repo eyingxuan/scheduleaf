@@ -11,7 +11,7 @@ class TestConstraintSolver(unittest.TestCase):
                 Task(3, None, False, [1], None, 140, "Task2"),
             ]
         )
-        self.assertListEqual(scheduler.solve_model(), [(0, 1), (4, 14), (1, 4)])
+        self.assertListEqual(scheduler.solve_model(), [(0, 1), (1, 11), (73, 76)])
 
     def test_not_provided_timeslot(self):
         scheduler = TaskScheduler(
@@ -21,7 +21,7 @@ class TestConstraintSolver(unittest.TestCase):
                 Task(3, None, False, [1], None, 140, "Task2"),
             ]
         )
-        self.assertListEqual(scheduler.solve_model(), [(94, 95), (3, 13), (0, 3)])
+        self.assertListEqual(scheduler.solve_model(), [(94, 95), (0, 10), (73, 76)])
 
     def test_dependencies_resp(self):
         scheduler = TaskScheduler(
@@ -30,7 +30,7 @@ class TestConstraintSolver(unittest.TestCase):
                 Task(3, None, False, [0], None, 140, "Task2"),
             ]
         )
-        self.assertListEqual(scheduler.solve_model(), [(3, 4), (0, 3)])
+        self.assertListEqual(scheduler.solve_model(), [(0, 1), (73, 76)])
 
     def test_no_deps(self):
         scheduler = TaskScheduler(
@@ -44,8 +44,8 @@ class TestConstraintSolver(unittest.TestCase):
     def test_infeasible_provided(self):
         scheduler = TaskScheduler(
             [
-                Task(5, 2, False, [], None, 100, "Task1"),
-                Task(3, None, False, [0], None, 140, "Task2"),
+                Task(3, None, False, [], None, 140, "Task2"),
+                Task(5, 2, False, [0], None, 100, "Task1"),
             ]
         )
         self.assertIsNone(scheduler.solve_model())
