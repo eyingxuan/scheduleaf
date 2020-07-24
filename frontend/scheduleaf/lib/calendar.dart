@@ -110,7 +110,7 @@ class _CalendarState extends State<Calendar> {
     // if the datetime to be found is for a deadline and it is at the start
     // of a day, move to the end of the previous day by subtracting 16 hours
     if (isDeadline && hourInt == 0) {
-      date.subtract(Duration(hours: 16));
+      date = date.subtract(Duration(hours: 16));
     }
 
     return date;
