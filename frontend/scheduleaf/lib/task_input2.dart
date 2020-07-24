@@ -108,7 +108,7 @@ class _TaskInputState2 extends State<TaskInput2> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(10.0),
                 ),
                 Expanded(
                   child: OutlineButton(
