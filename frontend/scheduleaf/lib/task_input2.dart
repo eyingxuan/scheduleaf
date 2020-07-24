@@ -47,7 +47,6 @@ class _TaskInputState2 extends State<TaskInput2> {
     return SingleChildScrollView(
       child: ListBody(
         children: <Widget>[
-          Text('Duration'),
           Row(
             children: <Widget>[
               Expanded(
@@ -71,42 +70,8 @@ class _TaskInputState2 extends State<TaskInput2> {
           ),
           Row(
             children: <Widget>[
-              FlatButton(
-                onPressed: () {
-                  DatePicker.showDateTimePicker(context,
-                      showTitleActions: true,
-                      minTime: DateTime(2020, 7, 20, 10, 0),
-                      maxTime: DateTime(2020, 7, 24, 18, 0),
-                      onChanged: (date) {}, onConfirm: (date) {
-                    startTime = date;
-                  }, currentTime: DateTime.now(), locale: LocaleType.en);
-                },
-                child: Text(
-                  'Start Time',
-                  style: TextStyle(color: Colors.blue),
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  DatePicker.showDateTimePicker(context,
-                      showTitleActions: true,
-                      minTime: DateTime(2020, 7, 20, 10, 0),
-                      maxTime: DateTime(2020, 7, 24, 18, 0),
-                      onChanged: (date) {}, onConfirm: (date) {
-                    endTime = date;
-                  }, currentTime: DateTime.now(), locale: LocaleType.en);
-                },
-                child: Text(
-                  'Deadline',
-                  style: TextStyle(color: Colors.blue),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
               Text(
-                'Concurrent',
+                'Concurrent Task?',
               ),
               Checkbox(
                 value: checkboxValue,
@@ -118,8 +83,61 @@ class _TaskInputState2 extends State<TaskInput2> {
               ),
             ],
           ),
-          FlatButton(
-            child: Text('Continue'),
+          Container(
+            padding: EdgeInsets.fromLTRB(1, 0, 1, 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: OutlineButton(
+                    color: Colors.white,
+                    borderSide: BorderSide(color: Colors.green, width: 1.5),
+                    onPressed: () {
+                      DatePicker.showDateTimePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(2020, 7, 20, 10, 0),
+                          maxTime: DateTime(2020, 7, 24, 18, 0),
+                          onChanged: (date) {}, onConfirm: (date) {
+                        startTime = date;
+                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                    },
+                    child: Text(
+                      'Start Time',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                ),
+                Expanded(
+                  child: OutlineButton(
+                    color: Colors.white,
+                    borderSide: BorderSide(color: Colors.green, width: 1.5),
+                    onPressed: () {
+                      DatePicker.showDateTimePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(2020, 7, 20, 10, 0),
+                          maxTime: DateTime(2020, 7, 24, 18, 0),
+                          onChanged: (date) {}, onConfirm: (date) {
+                        endTime = date;
+                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                    },
+                    child: Text(
+                      'Deadline',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          RaisedButton(
+            child: Text(
+              'Continue',
+              style: TextStyle(color: Colors.white),
+            ),
+            color: Colors.green,
             onPressed: () {
               setState(() {
                 taskData.setInput2Props(

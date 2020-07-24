@@ -57,17 +57,24 @@ class _TaskInputState3 extends State<TaskInput3> {
               },
             ),
           ),
-          FlatButton(
-            child: Text('Finish'),
-            onPressed: () {
-              setState(() {
-                taskData.setInput3Props(checkboxList);
-                Navigator.of(context).pop();
-                checkboxList.add(false);
-                taskDataList.value.add(taskData);
-                taskDataList.notifyListeners();
-              });
-            },
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+            child: RaisedButton(
+              child: Text(
+                'Finish',
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.green,
+              onPressed: () {
+                setState(() {
+                  taskData.setInput3Props(checkboxList);
+                  Navigator.of(context).pop();
+                  checkboxList.add(false);
+                  taskDataList.value.add(taskData);
+                  taskDataList.notifyListeners();
+                });
+              },
+            ),
           ),
           // TODO: Dependencies
         ],

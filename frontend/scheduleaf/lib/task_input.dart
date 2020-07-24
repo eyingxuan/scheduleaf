@@ -53,17 +53,24 @@ class _TaskInputState extends State<TaskInput> {
             maxLines: 4,
             controller: descController,
           ),
-          FlatButton(
-            child: Text('Continue'),
-            onPressed: () {
-              setState(() {
-                taskData.setInput1Props(
-                    nameController.text, descController.text);
-                print(taskData.name);
-                Navigator.of(context).pop();
-                _showMyDialog2();
-              });
-            },
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+            child: RaisedButton(
+              child: Text(
+                'Continue',
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.green,
+              onPressed: () {
+                setState(() {
+                  taskData.setInput1Props(
+                      nameController.text, descController.text);
+                  print(taskData.name);
+                  Navigator.of(context).pop();
+                  _showMyDialog2();
+                });
+              },
+            ),
           ),
           // TODO: Dependencies
         ],
